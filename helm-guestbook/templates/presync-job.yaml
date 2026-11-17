@@ -5,3 +5,14 @@ metadata:
   annotattions:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      conetainers:
+        - name: migration
+          image: busybox
+          command:
+            - "sh"
+            - "-c"
+            - "echo 'Running db migration...';sleep:10;echo 'Done!'"
