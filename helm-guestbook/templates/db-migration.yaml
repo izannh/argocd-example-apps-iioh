@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: db-migration-job
+  name: db-check-job
   annotations:
-    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "2"
     argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
   backoffLimit: 2
@@ -11,9 +11,15 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: migration
+        - name: check
           image: busybox
           command:
             - "sh"
             - "-c"
-            - "echo 'Running db migration...';sleep:10;echo 'Done!'"
+            - "echo 'Running db check to $DB_HOST...';sleep:4;echo 'Connected'"
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: db_host
