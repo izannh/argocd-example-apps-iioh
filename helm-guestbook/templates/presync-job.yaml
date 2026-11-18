@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       restartPolicy: Never
-      conetainers:
+      containers:
         - name: migration
           image: busybox
           command:
